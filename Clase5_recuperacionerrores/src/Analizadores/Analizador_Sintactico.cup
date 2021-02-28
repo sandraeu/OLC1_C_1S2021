@@ -1,0 +1,60 @@
+/*--------------- 1ra Area: Codigo de Usuario -----------------------*/
+//-------> importaciones, paquetes
+package Analizadores;
+import java_cup.runtime.Symbol;
+
+
+
+//------> Codigo para el parser,variables, metodos
+parser code{::}
+
+//------> Codigo para las acciones gramaticales
+action code
+{:  :}
+
+/*--------------- 2da Area: Declaraciones -----------------------*/
+
+//------> declaracion de terminales 
+
+terminal String porc, igual, kleen, pnt, pyc, or, para, parc, e_r, digito, id, cadena;
+
+//------> declaracion de no terminales
+non terminal String INICIO, LISTA_EXPRESIONES;
+non terminal EXPRESION;
+non terminal E;
+
+//------> precedencia
+precedence left pnt;
+precedence left or;
+precedence left kleen;
+
+
+start with INICIO;
+
+/*--------------- 3ra Area: Reglas Semanticas -----------------------*/
+
+INICIO::= porc porc LISTA_EXPRESIONES porc porc    {: :} 
+       ;
+
+LISTA_EXPRESIONES::= LISTA_EXPRESIONES EXPRESION    {:  :}
+       | EXPRESION:a                {: :}
+       ; 
+
+EXPRESION::= e_r igual E pyc 
+        ;
+
+E::= E or E 
+   | E pnt E 
+   | E kleen
+   | para E parc 
+   | E para E parc 
+   | id 
+   | cadena 
+   ;
+ 
+
+
+
+
+
+
