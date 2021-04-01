@@ -16,9 +16,49 @@ export class TablaSimbolos{
         this.tabla = new Map<string, Simbolos>();
     }
 
-    //TODO: agregar metodo para agregar simbolos a la tabla
+    agregar(id: string, simbolo : Simbolos){
+        this.tabla.set(id.toLowerCase(), simbolo); //convertimos a minuscula ya que nuestro lenguaje es caseinsitive ej. prueba = PRUeba
+    }
 
-    // TODO: Agregar metodo para validar si ya existe el simbolo (variable o funcion) en la tabla
+
+    existe(id: string): boolean{
+        let ts : TablaSimbolos = this;
+
+        while(ts != null){
+            let existe = ts.tabla.get(id);
+
+            if(existe != null){
+                return true;
+            }
+            ts = ts.ant;
+        }
+        return false;
+    }
+
+    
+    existeEnActual(id: string): boolean{
+        let ts : TablaSimbolos = this;
+
+        let existe = ts.tabla.get(id);
+
+        if(existe != null){
+            return true;
+        }
+        return false;
+    }
 
     // TODO: Agregar metodo para obtener un simbolo
+    getSimbolo(id: string){
+        let ts : TablaSimbolos = this; 
+
+        while(ts != null){
+            let existe = ts.tabla.get(id);
+
+            if(existe != null){
+                return existe;
+            }
+            ts = ts.ant;
+        }
+        return null;
+    }
 }

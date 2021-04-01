@@ -8,8 +8,7 @@ import Operacion, { Operador } from "./Operaciones";
 export default class Relacional extends Operacion implements Expresion{
     
     public constructor(exp1: Expresion, op: string, exp2: Expresion, linea: number, columna:number, expU :boolean) {
-        super(exp1,op,exp2,linea,columna,expU);   
-        console.log('relacional')     
+        super(exp1,op,exp2,linea,columna,expU);        
     }
 
     getTipo(controlador: Controlador, ts: TablaSimbolos) : tipo{

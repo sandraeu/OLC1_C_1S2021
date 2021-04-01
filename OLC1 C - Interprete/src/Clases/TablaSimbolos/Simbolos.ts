@@ -34,6 +34,10 @@ export default class Simbolos{
         this.metodo = metodo;
     }
 
+    setValor(valor): void{
+        this.valor = valor;
+    }
     // TODO: Agregar metodos set y get 
+    
 
 }

@@ -15,9 +15,26 @@ export enum tipo{
  */
 export default class Tipo{
     
-    constructor(public type : tipo) {
-        this.type = type;
+    public type : tipo; 
+    public stype : string;
+
+    constructor(stype : string) {
+        this.stype = stype;
+        this.type = this.getTipo(stype);
     }
 
     // TODO: Hacer metodo getTipo
+    getTipo(stype: string): tipo{
+        if(stype == 'DOBLE'){
+            return tipo.DOBLE;
+        }else if(stype == 'ENTERO'){
+            return tipo.ENTERO;
+        }else if(stype == 'STRING'){
+            return tipo.CADENA;
+        }
+    }
+
+    getStype():string {
+        return this.stype;
+    }
 }

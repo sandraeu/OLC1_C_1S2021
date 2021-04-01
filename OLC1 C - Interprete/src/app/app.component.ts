@@ -32,10 +32,17 @@ export class AppComponent {
   ejecutar():void{
     let ana = new analizador.Analizador();
     this.consola = "";
+
+    if(this.entrada != ""){
+      let ejecutar = ana.ejecutar(this.entrada);
+
+      this.consola = ejecutar.consola;
+      document.getElementById("tablasimbols").innerHTML = ejecutar.ts;
+    }
     /**
      * Inicializamos la tabla de simbolos y controlador 
      * En este espacio solo nos sirve de ejemplo en la clase 8
-     */
+     
     let ts = new TablaSimbolos(null);
     let cont = new Controlador();
 
@@ -46,6 +53,27 @@ export class AppComponent {
         this.consola += "El valor de la expresion es: " + num.resultado.getValor(cont,ts) + '\n';
       }
     }
+    */
+  }
+
+  
+  openPage(pageName) {
+    // Hide all elements with class="tabcontent" by default */
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+  
+    // Remove the background color of all tablinks/buttons
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].style.backgroundColor = "";
+    }
+  
+    document.getElementById(pageName).style.display = "block";
+  
   }
   
 }
