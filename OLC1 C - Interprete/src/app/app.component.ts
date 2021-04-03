@@ -14,17 +14,26 @@ export class AppComponent {
   
 
   //entrada : string = "";
-  entrada : string = `//Realizar una gramatica que reconozca el siguiente archivo de entrada
+  entrada : string = `//Archivo de entrada del ejemplo de reposicion de clase 9
 
-  //Operacion aritmetica
-  Evaluar[7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 * 2) + 50 * (6 * 2)]; //190
+  //------- Ahora podemos hacer DECLARACIONES DE VARIABLES
+  //podemos visualizar que las guardamos al dar click en ejecutar y despues dar click en la pestaña de abajo que dice "Tabla de Simbolos"
+  //podremos visualizar las variables e informacion importante como su valor 
   
-  //Operacion relacional
-  Evaluar[(44.399 > 44.4)]; //false
+  int entero = 30;
+  double decimal = 10.9999;
+  string cadena = "Hola Mundo";
+  boolean verdadero = true;
+  boolean falso = false;
   
-  //Operacion logica
-  Evaluar[!!!!!!!!!!!!true]; //true
-  Evaluar[(78 < 78 && TRUE)]; //false
+  //-------- tambien podemos hacer ASIGNACIONES DE VARIABLES 
+  //para ello podemos descomentar las asignaciones de abajo y visualizar en la Tabla de Simbolos los valores nuevos que les asignamos 
+  
+  //entero = 7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 * 2) + 50 * (6 * 2); // entero = 190
+  //decimal = 22.99 + 243.18 + 16.5 - 153.21; //129.46
+  //cadena = "Si sale compi 1";
+  //verdadero = !!!!!!!!!!!!true; //true
+  //falso = (78 < 78 && TRUE); //false
   `
   consola : string = "";
 
