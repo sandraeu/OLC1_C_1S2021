@@ -83,6 +83,21 @@ export default class Relacional extends Operacion implements Expresion{
                     }
                     
                     break;
+            case Operador.IGUALIGUAL:
+                if(typeof valor_exp1 === 'number'){
+                    if(typeof valor_exp2 === 'number'){
+                        return valor_exp1 == valor_exp2;
+                    }
+                }
+                break;
+            case Operador.MAYORIGUAL:
+                    if(typeof valor_exp1 === 'number'){
+                        if(typeof valor_exp2 === 'number'){
+                            return valor_exp1 >= valor_exp2;
+                        }
+                    }
+                    break;
+                
             // TODO: Agregar mas casos de relacionales (IGUALIGUAL, DIFERENCIA, MAYORIGUAL, MENORIGUAL)
             default:
                 break;

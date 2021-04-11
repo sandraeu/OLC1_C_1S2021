@@ -16,7 +16,9 @@ export enum Operador {
     MAYORQUE,
     AND,
     NOT,
-    UNARIO
+    UNARIO,
+    IGUALIGUAL,
+    MAYORIGUAL
 }
 
 /**
@@ -74,6 +76,10 @@ export default class Operacion implements Expresion{
             return Operador.NOT;
         }else if(op == 'UNARIO'){
             return Operador.UNARIO;
+        }else if(op == '=='){
+            return Operador.IGUALIGUAL;
+        }else if(op == '>='){
+            return Operador.MAYORIGUAL;
         }
     }
 

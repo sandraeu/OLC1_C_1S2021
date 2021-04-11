@@ -70,6 +70,26 @@ export default class Aritmetica extends Operacion  implements Expresion {
                     }else if(typeof valor_exp2 === 'boolean'){
                         //TODO: agregar error semantico.
                     }
+                }else if(typeof valor_exp1 == 'string'){
+                    if(valor_exp1.length == 1){
+                        if(typeof valor_exp2 == 'string'){
+                            if(valor_exp2.length == 1){ //si es de tamaño 1 es un caracter
+                                console.log('suma de caracteres ')
+                                return valor_exp1 + valor_exp2;
+                            }else{
+                                return valor_exp1 + valor_exp2; //se convierte a cadena
+                            }
+                        }
+                    }else{
+                        if(typeof valor_exp2 == 'string'){
+                            if(valor_exp2.length == 1){ //si es de tamaño 1 es un caracter
+                                return valor_exp1 + valor_exp2; 
+                            }else{
+                                return valor_exp1 + valor_exp2; //se convierte a cadena
+                            }
+                        }
+                    }
+                    
                 }
                 
                 break;

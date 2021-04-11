@@ -15,25 +15,35 @@ escape      \\{escapechar}
 aceptacion  [^\"\\]+
 cadena      (\"({escape} | {aceptacion})*\")
 
-//--> Char
-caracter     (\'({escape} | {aceptacion})*\')
+//--> Caracter
+escapechar2  [\\ntr]
+escape2      \\{escapechar2}
+aceptada2    [^\'\\]
+caracter     (\'({escape2}|{aceptada2})\')
 
 %%
 
 /* Comentarios */
 "//".*              {/* Ignoro los comentarios simples */}
+"/*"((\*+[^/*])|([^*]))*\**"*/"     {/*Ignorar comentarios con multiples lneas*/}  
+
 
 /* Simbolos del programa */
-
 
 "++"                    { console.log("Reconocio : "+ yytext); return 'INCRE'}
 "("                    { console.log("Reconocio : "+ yytext); return 'PARA'}
 ")"                    { console.log("Reconocio : "+ yytext); return 'PARC'}
 "["                    { console.log("Reconocio : "+ yytext); return 'CORA'}
 "]"                    { console.log("Reconocio : "+ yytext); return 'CORC'}
+
 ";"                    { console.log("Reconocio : "+ yytext); return 'PYC'}
 ","                    { console.log("Reconocio : "+ yytext); return 'COMA'}
+"=="                    { console.log("Reconocio : "+ yytext); return 'IGUALIGUAL'}
 "="                    { console.log("Reconocio : "+ yytext); return 'IGUAL'}
+"?"                    { console.log("Reconocio : "+ yytext); return 'INTERROGACION'}
+":"                    { console.log("Reconocio : "+ yytext); return 'DSPNTS'}
+"{"                    { console.log("Reconocio : "+ yytext); return 'LLAVA'}
+"}"                    { console.log("Reconocio : "+ yytext); return 'LLAVC'}
 
 /* Operadores Aritmeticos */
 "+"                    { console.log("Reconocio : "+ yytext); return 'MAS'}
@@ -43,6 +53,7 @@ caracter     (\'({escape} | {aceptacion})*\')
 
 /* Operadores Relacionales */
 "<"                    { console.log("Reconocio : "+ yytext); return 'MENORQUE'}
+">="                   { console.log("Reconocio : "+ yytext); return 'MAYORIGUAL'}
 ">"                   { console.log("Reconocio : "+ yytext); return 'MAYORQUE'}
 
 /* Operadores Logicos */
@@ -58,6 +69,10 @@ caracter     (\'({escape} | {aceptacion})*\')
 "string"               { console.log("Reconocio : "+ yytext); return 'STRING'}
 "char"               { console.log("Reconocio : "+ yytext); return 'CHAR'}
 "boolean"               { console.log("Reconocio : "+ yytext); return 'BOOLEAN'}
+"print"               { console.log("Reconocio : "+ yytext); return 'PRINT'}
+"if"               { console.log("Reconocio : "+ yytext); return 'IF'}
+"while"               { console.log("Reconocio : "+ yytext); return 'WHILE'}
+"else"               { console.log("Reconocio : "+ yytext); return 'ELSE'}
 
 /* SIMBOLOS ER */
 [0-9]+("."[0-9]+)?\b        { console.log("Reconocio : "+ yytext); return 'DECIMAL'}
@@ -91,13 +106,21 @@ caracter     (\'({escape} | {aceptacion})*\')
     const asignacion = require('../Clases/Instrucciones/Asignacion');
     const simbolo = require('../Clases/TablaSimbolos/Simbolos');
     const tipo = require('../Clases/TablaSimbolos/Tipo');
+
+    const identificador = require('../Clases/Expresiones/Identificador');
+    const ternario = require('../Clases/Expresiones/Ternario');
+
+    const Print = require('../Clases/Instrucciones/Print');
+    const Ifs = require('../Clases/Instrucciones/SentenciaControl/Ifs');
+    const While = require('../Clases/Instrucciones/SentenciaCiclica/While');
 %}
 
 /* Precedencia de operadores de mayor a menor */
 
+%right 'INTERROGACION'
 %left 'AND'
 %right 'NOT'
-%left 'MENORQUE' 'MAYORQUE' 
+%left 'MENORQUE' 'MAYORQUE' 'IGUALIGUAL' 'MAYORIGUAL'
 %left 'MAS' 'MENOS'
 %left 'MULTI' 'DIV'
 %right 'UNARIO'
@@ -118,6 +141,9 @@ instrucciones : instrucciones instruccion   { $$ = $1; $$.push($2); }
 
 instruccion : declaracion   {$$ = $1; }
             | asignacion    { $$ = $1; }
+            | print         { $$ = $1; }
+            | sent_if       { $$ = $1; }
+            | sent_while    { $$ = $1; }
             ;
 
 declaracion : tipo lista_simbolos PYC   { $$ = new declaracion.default($1, $2, @1.first_line, @1.last_column); }
@@ -125,9 +151,9 @@ declaracion : tipo lista_simbolos PYC   { $$ = new declaracion.default($1, $2, @
 
 tipo : INT      { $$ = new tipo.default('ENTERO'); }
     | DOUBLE    { $$ = new tipo.default('DOBLE'); }
-    | STRING    { $$ = new tipo.default($1); }
-    | CHAR      { $$ = new tipo.default($1); }
-    | BOOLEAN   { $$ = new tipo.default($1); }
+    | STRING    { $$ = new tipo.default('STRING'); }
+    | CHAR      { $$ = new tipo.default('CHAR'); }
+    | BOOLEAN   { $$ = new tipo.default('BOOLEAN'); }
     ;
 /**
     lista de simbolos
@@ -144,6 +170,17 @@ lista_simbolos : lista_simbolos COMA ID          { $$ = $1; $$.push(new simbolo.
 asignacion : ID IGUAL e PYC   { $$ = new asignacion.default($1,$3, @1.first_line, @1.last_column); }
             ; 
 
+sent_if : IF PARA e PARC LLAVA instrucciones LLAVC { $$ = new Ifs.default($3, $6, [], @1.first_line, @1.last_column); }
+        | IF PARA e PARC LLAVA instrucciones LLAVC ELSE LLAVA instrucciones LLAVC { $$ = new Ifs.default($3, $6, $10, @1.first_line, @1.last_column); }
+        | IF PARA e PARC LLAVA instrucciones LLAVC ELSE sent_if { $$ = new Ifs.default($3, $6, [$9], @1.first_line, @1.last_column); }
+        ;
+ 
+sent_while : WHILE PARA e PARC LLAVA instrucciones LLAVC { $$ = new While.default($3, $6, @1.first_line, @1.last_column); }
+            ; 
+
+print : PRINT PARA e PARC PYC  {$$ = new Print.default($3, @1.first_line, @1.last_column); }
+    ; 
+
 e : e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line, $1.last_column, false);}
     | e MENOS e         {$$ = new aritmetica.default($1, '-', $3, $1.first_line, $1.last_column, false);}
     | e MULTI e         {$$ = new aritmetica.default($1, '*', $3, $1.first_line, $1.last_column, false);}
@@ -151,7 +188,9 @@ e : e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line,
     | e AND e           {$$ = new logica.default($1, '&&', $3, $1.first_line, $1.last_column, false);}
     | NOT e             {$$ = new logica.default($2, '!', null, $1.first_line, $1.last_column, true);}
     | e MAYORQUE e      {$$ = new relacional.default($1, '>', $3, $1.first_line, $1.last_column, false);}
+    | e MAYORIGUAL e      {$$ = new relacional.default($1, '>=', $3, $1.first_line, $1.last_column, false);}
     | e MENORQUE e      {$$ = new relacional.default($1, '<', $3, $1.first_line, $1.last_column, false);}
+    | e IGUALIGUAL e      {$$ = new relacional.default($1, '==', $3, $1.first_line, $1.last_column, false);}
     | MENOS e %prec UNARIO {$$ = new aritmetica.default($2, 'UNARIO', null, $1.first_line, $1.last_column, true);}
     | PARA e PARC       {$$ = $2;}
     | DECIMAL           {$$ = new primitivo.default(Number(yytext), $1.first_line, $1.last_column);}
@@ -160,8 +199,12 @@ e : e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line,
     | CHAR              {$1 = $1.slice(1, $1.length-1); $$ = new primitivo.default($1, $1.first_line, $1.last_column);}
     | TRUE              {$$ = new primitivo.default(true, $1.first_line, $1.last_column);}
     | FALSE             {$$ = new primitivo.default(false, $1.first_line, $1.last_column);}
+    | ID                {$$ = new identificador.default($1, @1.first_line, @1.last_column); }
+    | e INTERROGACION e DSPNTS e {$$ = new ternario.default($1, $3, $5, @1.first_line, @1.last_column); } 
+    | ID INCRE          {$$ = new aritmetica.default($1, '+', 1, $1.first_line, $1.last_column, false);}
     ;
 
 
+//--> La siguiente produccion solo sirvio para fines de ejemplo en la clase 8
 instruccion_clase8 : EVALUAR CORA e CORC PYC { $$ = new evaluar.default($3); }
             ;

@@ -4,7 +4,7 @@ import Controlador from "../Controlador";
 import { Instruccion } from "../Interfaces/Instruccion";
 import Simbolos from "../TablaSimbolos/Simbolos";
 import { TablaSimbolos } from "../TablaSimbolos/TablaSimbolos";
-import Tipo from "../TablaSimbolos/Tipo";
+import Tipo, { tipo } from "../TablaSimbolos/Tipo";
 
 
 export default class Declaracion implements Instruccion{
@@ -44,10 +44,18 @@ export default class Declaracion implements Instruccion{
                 let valor = variable.valor.getValor(controlador,ts);
 
                 //TODO: Verificar que el tipo del valor obtenido sea igual al de la declaracion 
-
-                //--> Lo agregamos a la tabla de simbolos 
-                let nuevo_simb = new Simbolos(variable.simbolo, this.type, variable.identificador, valor);
-                ts.agregar(variable.identificador, nuevo_simb);
+                let tipo_valor = variable.valor.getTipo(controlador,ts);
+                console.log(tipo_valor, this.type.type);
+                if(tipo_valor == this.type.type || (tipo_valor == tipo.DOBLE && this.type.type == tipo.ENTERO)){
+                    //--> Lo agregamos a la tabla de simbolos 
+                   
+                    let nuevo_simb = new Simbolos(variable.simbolo, this.type, variable.identificador, valor);
+                    ts.agregar(variable.identificador, nuevo_simb);
+                    console.log("son del mismo tipo")
+                }else{
+                    //Error no se puede declarar por incopatibilidad de simbolos
+                }
+                
             }else{
                 //--> Lo agregamos a la tabla de simbolos 
                 let nuevo_simb = new Simbolos(variable.simbolo, this.type, variable.identificador, null);
