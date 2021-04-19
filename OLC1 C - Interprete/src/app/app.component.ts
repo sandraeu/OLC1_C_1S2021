@@ -16,7 +16,7 @@ export class AppComponent {
   //entrada : string = "";
   entrada : string = `  //Archivo de entrada del ejemplo del interprete realizado en laboratorio
 
-  /* DECLARACIONES DE VARIABLES
+  /* DECLARACIONES DE VARIABLES 
   	podemos visualizar que guardamos las declaraciones al dar click en ejecutar 
     y despues dar click en la pestaña de abajo que dice "Tabla de Simbolos"
   	podremos visualizar las variables e informacion importante como su valor */
@@ -26,66 +26,90 @@ export class AppComponent {
   string cadena = "Hola Mundo", concat = 'a' + 'b' + 'c';
   boolean verdadero = true, falso = false, bandera = false;
   
-  /* ASIGNACIONES DE VARIABLES 
-   para ello podemos descomentar las asignaciones de abajo y visualizar en la Tabla de Simbolos los valores nuevos que les asignamos */
-  
-  /* 
-   entero = 7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 * 2) + 50 * (6 * 2); // entero = 190
-   decimal = 22.99 + 243.18 + 16.5 - 153.21; //129.46
-   cadena = "Si sale compi 1" + ":D";
-   verdadero = !!!!!!!!!!!!true; //true
-   falso = (78 < 78 && TRUE); //false
-  */
+  //EJECUCION DEL CODIGO
+	ejecutar main();
+	
+  //METODOS 
+  void main(){
+    print("** Inicia la ejecucion del codigo del programa **");
+    
+    //Llamadas de metodos
+    asignacion_a_var_globales();
+    operador_ternario();
+    sentencia_elseif();
+    sentencia_else();
+    ciclo_while();
+    sentencias();
+  }
 
-  	// Operador ternario 
-	bandera = edad > 17 ? true : false;
-	//prueba de if y operador ternario
-	if(bandera){
-    	print("Ternario funciona correctamente.");
-    }else{
-     	print("No funciono el ternario");
+  void asignacion_a_var_globales(){
+    // ASIGNACIONES DE VARIABLES 
+	 entero = 7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 * 2) + 50 * (6 * 2); // entero = 190
+     decimal = 22.99 + 243.18 + 16.5 - 153.21; //129.46
+     cadena = "Si sale compi 1" + ":D";
+     verdadero = !!!!!!!!!!!!true; //true
+     falso = (78 < 78 && TRUE); //false
+  }
+
+	void operador_ternario(){
+      // Operador ternario 
+      bandera = edad > 17 ? true : false;
+      //prueba de if y operador ternario
+      if(bandera){
+          print("Ternario funciona correctamente.");
+      }else{
+          print("No funciono el ternario");
+      }
     }
 	
-	//Prueba de else if
-	if(2>3){
-      	print("Error en la validacion del if.");
-    }else if(bandera){
-      	print("Funciona el else if :D");
-    }
-
-	//Prueba else 
-	if(2>3){
-      	print("Error en la validacion del if.");
-    }else if(edad < 10){
-      	print("Error en la validacion del else if.");
-    }else if(edad < 11){
-      	print("Error en la validacion del else if.");
-    }else{
-      	print("Funciona el Else :D");
-    }
-
-	//ciclo while
-	int cont = 0;
-	while(cont < 2){
-      	print("Esto se imprime 2 veces");
-      	cont = cont + 1;
+	void sentencia_elseif(){
+      //Prueba de else if
+      if(2>3){
+          print("Error en la validacion del if.");
+      }else if(bandera){
+          print("Funciona el else if :D");
+      }
     }
 	
+	void sentencia_else(){
+      //Prueba else 
+      if(2>3){
+          print("Error en la validacion del if.");
+      }else if(edad < 10){
+          print("Error en la validacion del else if.");
+      }else if(edad < 11){
+          print("Error en la validacion del else if.");
+      }else{
+          print("Funciona el Else :D");
+      }
+    }
+	
+	void ciclo_while(){
+      //ciclo while
+      int cont = 0;
+      while(cont < 2){
+          print("Esto se imprime 2 veces");
+          cont = cont + 1;
+      }
+    }
+	
+	void sentencias(){
 	//Prueba if dentro de ciclo while
-	double index = 0;
-    while (index >= 0) {
-        if (index == 0) {
-            index = index + 100;
-        } else if (index > 50) {
-            index = index / 2 - 25;
-        } else {
-            index = (index / 2) - 1;
-        }
+      double index = 0;
+      while (index >= 0) {
+          if (index == 0) {
+              index = index + 100;
+          } else if (index > 50) {
+              index = index / 2 - 25;
+          } else {
+              index = (index / 2) - 1;
+          }
 
-        print(index);
+          print(index);
+      }
     }
-
 /* Salida del programa 
+  ** Inicia la ejecucion del codigo del programa **	
   Ternario funciona correctamente.
   Funciona el else if :D
   Funciona el Else :D
@@ -98,6 +122,7 @@ export class AppComponent {
   1.375
   -0.3125 
 */
+  
   `
   consola : string = "";
 

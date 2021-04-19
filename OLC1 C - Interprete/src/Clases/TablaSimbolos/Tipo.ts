@@ -7,7 +7,8 @@ export enum tipo{
     DOBLE,
     BOOLEANO,
     CARACTER,
-    CADENA
+    CADENA, 
+    VOID
 }
 
 /**
@@ -33,6 +34,8 @@ export default class Tipo{
             return tipo.CADENA;
         }else if(stype == 'BOOLEAN'){
             return tipo.BOOLEANO;
+        }else if(stype == 'VOID'){
+            return tipo.VOID;
         }
     }
 

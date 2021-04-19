@@ -73,6 +73,8 @@ caracter     (\'({escape2}|{aceptada2})\')
 "if"               { console.log("Reconocio : "+ yytext); return 'IF'}
 "while"               { console.log("Reconocio : "+ yytext); return 'WHILE'}
 "else"               { console.log("Reconocio : "+ yytext); return 'ELSE'}
+"void"               { console.log("Reconocio : "+ yytext); return 'VOID'}
+"ejecutar"               { console.log("Reconocio : "+ yytext); return 'EJECUTAR'}
 
 /* SIMBOLOS ER */
 [0-9]+("."[0-9]+)?\b        { console.log("Reconocio : "+ yytext); return 'DECIMAL'}
@@ -113,6 +115,11 @@ caracter     (\'({escape2}|{aceptada2})\')
     const Print = require('../Clases/Instrucciones/Print');
     const Ifs = require('../Clases/Instrucciones/SentenciaControl/Ifs');
     const While = require('../Clases/Instrucciones/SentenciaCiclica/While');
+
+    const funcion = require('../Clases/Instrucciones/Funcion');
+    const llamada = require('../Clases/Instrucciones/Llamada');
+
+    const ejecutar = require('../Clases/Instrucciones/Ejecutar');
 %}
 
 /* Precedencia de operadores de mayor a menor */
@@ -143,7 +150,10 @@ instruccion : declaracion   {$$ = $1; }
             | asignacion    { $$ = $1; }
             | print         { $$ = $1; }
             | sent_if       { $$ = $1; }
-            | sent_while    { $$ = $1; }
+            | sent_while    { $$ = $1; } 
+            | funciones     { $$ = $1; }
+            | llamada PYC   { $$ = $1; }
+            | EJECUTAR llamada PYC { $$ = new ejecutar.default($2, @1.first_line, @1.last_column); }
             ;
 
 declaracion : tipo lista_simbolos PYC   { $$ = new declaracion.default($1, $2, @1.first_line, @1.last_column); }
@@ -181,6 +191,22 @@ sent_while : WHILE PARA e PARC LLAVA instrucciones LLAVC { $$ = new While.defaul
 print : PRINT PARA e PARC PYC  {$$ = new Print.default($3, @1.first_line, @1.last_column); }
     ; 
 
+funciones : VOID ID PARA PARC LLAVA instrucciones LLAVC     { $$ = new funcion.default(3, new tipo.default('VOID'), $2, [], true, $6, @1.first_line, @1.last_column ); }
+        | VOID ID PARA lista_parametros PARC LLAVA instrucciones LLAVC  { $$ = new funcion.default(3, new tipo.default('VOID'), $2, $4, true, $7, @1.first_line, @1.last_column ); }
+        ;
+
+lista_parametros : lista_parametros COMA tipo ID    { $$ = $1; $$.push(new simbolo.default(6,$3, $4, null)); }
+                | tipo ID                           { $$ = new Array(); $$.push(new simbolo.default(6,$1,$2, null)); }
+                ;
+
+llamada : ID PARA PARC              { $$ = new llamada.default($1, [],@1.first_line, @1.last_column ); }
+        | ID PARA lista_exp PARC    { $$ = new llamada.default($1, $3 ,@1.first_line, @1.last_column ); }
+        ;
+
+lista_exp : lista_exp COMA e        { $$ = $1; $$.push($3); }
+        | e                         { $$ = new Array(); $$.push($1); }
+        ;
+
 e : e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line, $1.last_column, false);}
     | e MENOS e         {$$ = new aritmetica.default($1, '-', $3, $1.first_line, $1.last_column, false);}
     | e MULTI e         {$$ = new aritmetica.default($1, '*', $3, $1.first_line, $1.last_column, false);}
@@ -202,6 +228,7 @@ e : e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line,
     | ID                {$$ = new identificador.default($1, @1.first_line, @1.last_column); }
     | e INTERROGACION e DSPNTS e {$$ = new ternario.default($1, $3, $5, @1.first_line, @1.last_column); } 
     | ID INCRE          {$$ = new aritmetica.default($1, '+', 1, $1.first_line, $1.last_column, false);}
+  
     ;
 
 
