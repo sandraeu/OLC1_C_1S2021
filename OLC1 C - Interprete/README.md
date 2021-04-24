@@ -4,8 +4,11 @@
 ### Información General 
 
 >  **1er Semestre 2021**
+
 >  **Curso:** Organizacion de Lenguajes y Compiladores 1
+
 >  **Seccion:** C
+
 >  **Creado por:** [Sandra Jiménez](https://github.com/sandraeu) 
 
 ### Herramientas 
