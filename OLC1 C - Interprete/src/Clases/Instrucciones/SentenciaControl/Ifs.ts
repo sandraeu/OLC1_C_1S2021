@@ -4,6 +4,7 @@ import { Expresion } from "src/Clases/Interfaces/Expresion";
 import { Instruccion } from "src/Clases/Interfaces/Instruccion";
 import { TablaSimbolos } from "src/Clases/TablaSimbolos/TablaSimbolos";
 import { tipo } from "src/Clases/TablaSimbolos/Tipo";
+import Detener from "../SentenciaTransferencia/Break";
 
 
 export default class Ifs implements Instruccion{
@@ -32,11 +33,17 @@ export default class Ifs implements Instruccion{
                 for(let ins of this.lista_ifs){
                     let res = ins.ejecutar(controlador, ts_local);
                     //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
+                    if(ins instanceof Detener || res instanceof Detener  ){
+                        return res;
+                    }
                 }
             }else{
                 for(let ins of this.lista_elses){
                     let res = ins.ejecutar(controlador,ts_local);
-                    //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
+                    //TODO verificar si res es de tipo CONTINUE, RETORNO 
+                    if(ins instanceof Detener || res instanceof Detener  ){
+                        return res;
+                    }
                 }
             }
         }

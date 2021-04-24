@@ -33,7 +33,7 @@ export default class Operacion implements Expresion{
     public operador : Operador;
     public linea : number;
     public columna: number;
-
+    public op : string; 
     /**
      * @constructor Creamos una nueva operacion
      * @param exp1 expresion izquierda de la operacion
@@ -49,6 +49,7 @@ export default class Operacion implements Expresion{
         this.columna = columna;
         this.linea = linea;
         this.expU = expU;
+        this.op = operador;
         this.operador = this.getOperador(operador);
     }
 

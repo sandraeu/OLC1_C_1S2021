@@ -42,7 +42,10 @@ export default class  Primitivo implements Expresion{
         return this.primitivo;
     }
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+       let padre = new Nodo("Primitivo","");
+        padre.AddHijo(new Nodo(this.primitivo.toString(),""));
+
+       return padre;
     }
 
 }

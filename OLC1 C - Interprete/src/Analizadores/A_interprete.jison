@@ -75,6 +75,7 @@ caracter     (\'({escape2}|{aceptada2})\')
 "else"               { console.log("Reconocio : "+ yytext); return 'ELSE'}
 "void"               { console.log("Reconocio : "+ yytext); return 'VOID'}
 "ejecutar"               { console.log("Reconocio : "+ yytext); return 'EJECUTAR'}
+"break"               { console.log("Reconocio : "+ yytext); return 'BREAK'}
 
 /* SIMBOLOS ER */
 [0-9]+("."[0-9]+)?\b        { console.log("Reconocio : "+ yytext); return 'DECIMAL'}
@@ -90,7 +91,16 @@ caracter     (\'({escape2}|{aceptada2})\')
 <<EOF>>               return 'EOF'
 
 /* Errores lexicos */
-.                     return 'ERROR'
+.                     { console.log("Error Lexico "+yytext
+                        +" linea "+yylineno
+                        +" columna "+(yylloc.last_column+1));
+
+                        new errores.default('Lexico', 'El caracter ' + yytext 
+                                + ' no forma parte del lenguaje', 
+                                yylineno+1, 
+                                yylloc.last_column+1); 
+                                      
+                        }
 
 /lex
 
@@ -120,6 +130,10 @@ caracter     (\'({escape2}|{aceptada2})\')
     const llamada = require('../Clases/Instrucciones/Llamada');
 
     const ejecutar = require('../Clases/Instrucciones/Ejecutar');
+
+    const detener = require('../Clases/Instrucciones/SentenciaTransferencia/Break');
+    const errores = require('../Clases/Ast/Errores');
+
 %}
 
 /* Precedencia de operadores de mayor a menor */
@@ -154,6 +168,15 @@ instruccion : declaracion   {$$ = $1; }
             | funciones     { $$ = $1; }
             | llamada PYC   { $$ = $1; }
             | EJECUTAR llamada PYC { $$ = new ejecutar.default($2, @1.first_line, @1.last_column); }
+            | BREAK PYC     { $$ = new detener.default(); }
+            | error         { console.log("Error Sintactico" + yytext 
+                                    + "linea: " + this._$.first_line 
+                                    + "columna: " + this._$.first_column); 
+                        
+                                new errores.default("Lexico", "No se esperaba el caracter "+ yytext , 
+                                                this._$.first_line ,this._$.first_column);            
+                            }
+ 
             ;
 
 declaracion : tipo lista_simbolos PYC   { $$ = new declaracion.default($1, $2, @1.first_line, @1.last_column); }
@@ -207,7 +230,7 @@ lista_exp : lista_exp COMA e        { $$ = $1; $$.push($3); }
         | e                         { $$ = new Array(); $$.push($1); }
         ;
 
-e : e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line, $1.last_column, false);}
+e :   e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line, $1.last_column, false);}
     | e MENOS e         {$$ = new aritmetica.default($1, '-', $3, $1.first_line, $1.last_column, false);}
     | e MULTI e         {$$ = new aritmetica.default($1, '*', $3, $1.first_line, $1.last_column, false);}
     | e DIV e           {$$ = new aritmetica.default($1, '/', $3, $1.first_line, $1.last_column, false);}
@@ -227,8 +250,7 @@ e : e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line,
     | FALSE             {$$ = new primitivo.default(false, $1.first_line, $1.last_column);}
     | ID                {$$ = new identificador.default($1, @1.first_line, @1.last_column); }
     | e INTERROGACION e DSPNTS e {$$ = new ternario.default($1, $3, $5, @1.first_line, @1.last_column); } 
-    | ID INCRE          {$$ = new aritmetica.default($1, '+', 1, $1.first_line, $1.last_column, false);}
-  
+    | ID INCRE          {$$ = new aritmetica.default(new identificador.default($1, @1.first_line, @1.last_column), '+', new primitivo.default(1, $1.first_line, $1.last_column), $1.first_line, $1.last_column, false);}
     ;
 
 

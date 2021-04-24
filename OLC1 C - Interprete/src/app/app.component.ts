@@ -5,6 +5,7 @@ import { TablaSimbolos } from 'src/Clases/TablaSimbolos/TablaSimbolos';
 
 import * as analizador from '../Clases/Analizar'
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,7 +16,7 @@ export class AppComponent {
 
   //entrada : string = "";
   entrada : string = `  //Archivo de entrada del ejemplo del interprete realizado en laboratorio
-
+	
   /* DECLARACIONES DE VARIABLES 
   	podemos visualizar que guardamos las declaraciones al dar click en ejecutar 
     y despues dar click en la pestaña de abajo que dice "Tabla de Simbolos"
@@ -26,6 +27,11 @@ export class AppComponent {
   string cadena = "Hola Mundo", concat = 'a' + 'b' + 'c';
   boolean verdadero = true, falso = false, bandera = false;
   
+  //PRUEBA DE ERRORES
+  int # errlexico $;    //error lexico se recupera y se declara correctamenta la variable
+  int errsintactico 20; //error sintactico se recupera y no se declara la variable
+  int errlexico = 110;   //error semantico se recupera y no se declara la variable porque ya existe
+
   //EJECUCION DEL CODIGO
 	ejecutar main();
 	
@@ -33,18 +39,19 @@ export class AppComponent {
   void main(){
     print("** Inicia la ejecucion del codigo del programa **");
     
-    //Llamadas de metodos
+    //LLAMADAS DE METODOS
     asignacion_a_var_globales();
     operador_ternario();
     sentencia_elseif();
     sentencia_else();
     ciclo_while();
     sentencias();
+    detener();
   }
 
   void asignacion_a_var_globales(){
     // ASIGNACIONES DE VARIABLES 
-	 entero = 7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 * 2) + 50 * (6 * 2); // entero = 190
+	   entero = 7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 * 2) + 50 * (6 * 2); // entero = 190
      decimal = 22.99 + 243.18 + 16.5 - 153.21; //129.46
      cadena = "Si sale compi 1" + ":D";
      verdadero = !!!!!!!!!!!!true; //true
@@ -52,7 +59,7 @@ export class AppComponent {
   }
 
 	void operador_ternario(){
-      // Operador ternario 
+      //OPERADOR TERNARIO 
       bandera = edad > 17 ? true : false;
       //prueba de if y operador ternario
       if(bandera){
@@ -63,7 +70,7 @@ export class AppComponent {
     }
 	
 	void sentencia_elseif(){
-      //Prueba de else if
+      //ELSE IF
       if(2>3){
           print("Error en la validacion del if.");
       }else if(bandera){
@@ -72,7 +79,7 @@ export class AppComponent {
     }
 	
 	void sentencia_else(){
-      //Prueba else 
+      //ELSE
       if(2>3){
           print("Error en la validacion del if.");
       }else if(edad < 10){
@@ -85,7 +92,7 @@ export class AppComponent {
     }
 	
 	void ciclo_while(){
-      //ciclo while
+      //WHILE
       int cont = 0;
       while(cont < 2){
           print("Esto se imprime 2 veces");
@@ -94,7 +101,7 @@ export class AppComponent {
     }
 	
 	void sentencias(){
-	//Prueba if dentro de ciclo while
+	//IF DENTRO DE CICLO WHILE
       double index = 0;
       while (index >= 0) {
           if (index == 0) {
@@ -108,7 +115,23 @@ export class AppComponent {
           print(index);
       }
     }
-/* Salida del programa 
+
+	void detener(){
+    //BREAK
+      	int i = 0;
+      	while(i < 100){
+          if(i == 2){
+            print("Detenemos el ciclo while");
+            break;
+          }
+          print("Iterando.. ");
+          i = i + 1;
+        }
+    }
+
+/* SALIDA DEL PROGRAMA
+
+  ** Error Semantico : La variable errlexico ya existe en el entorno actual. En la linea 16 y columna 5
   ** Inicia la ejecucion del codigo del programa **	
   Ternario funciona correctamente.
   Funciona el else if :D
@@ -121,11 +144,24 @@ export class AppComponent {
   4.75
   1.375
   -0.3125 
+  Iterando.. 
+  Iterando.. 
+  Detenemos el ciclo while
 */
-  
   `
   consola : string = "";
 
+  recorrer(): void{
+    let ana = new analizador.Analizador();
+
+    if(this.entrada != ""){
+      console.log("Vamos a graficar");
+      let nodo_ast = ana.recorrer(this.entrada);
+
+      let grafo = nodo_ast.GraficarSintactico();  //Aqui tenemos la cadena de graphviz para graficar
+
+    }
+  }
 
   ejecutar():void{
     let ana = new analizador.Analizador();

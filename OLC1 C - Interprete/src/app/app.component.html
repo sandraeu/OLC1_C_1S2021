@@ -7,25 +7,9 @@
       <form class="form-inline">
         <form class="form-inline">          
             <button mdbBtn (click)="ejecutar()" color="success" outline="true" class="waves-light" mdbWavesEffect type="button"><i class="fas fa-play"></i>Ejecutar</button>
-            <button mdbBtn  color="warning" outline="true" class="align-middle waves-light" mdbWavesEffect type="button"><i class="fas fa-sitemap"></i>AST</button>
-           
+            
         </form>
-        <ul class="navbar-nav ml-auto">
-          
-          
-    
-          <!-- Dropdown -->
-          <li class="nav-item dropdown  blue-grey lighten-2" dropdown>
-            <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-              <i class="fas fa-clipboard-list"></i> Reportes<span class="caret"></span></a>
-            <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
-              <a class="dropdown-item waves-light" mdbWavesEffect >Errores Lexico y sintactico</a>
-              <a class="dropdown-item waves-light" mdbWavesEffect  >Errores Semanticos</a>
-              <a class="dropdown-item waves-light" mdbWavesEffect  >Tabla de Simbolos</a>
-            </div>
-          </li>
-    
-        </ul>
+        
     </form>
   </links>
 </mdb-navbar>
@@ -70,12 +54,14 @@
   <br>
 
   <button class="tablink" (click)="openPage('TablaSim')">Tabla de Simbolos</button>
+  
     
     <div id="TablaSim" class="tabcontent" style="background-color: #616161;">
       <table mdbTable id= "tablasimbols" style="width:100%" bordered="true">
       
       </table>
     </div>
+
 
   <br>
 </div>

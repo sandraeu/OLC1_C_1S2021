@@ -3,6 +3,7 @@ import Controlador from "src/Clases/Controlador";
 import { Expresion } from "src/Clases/Interfaces/Expresion";
 import { Instruccion } from "src/Clases/Interfaces/Instruccion";
 import { TablaSimbolos } from "src/Clases/TablaSimbolos/TablaSimbolos";
+import Detener from "../SentenciaTransferencia/Break";
 
 export default class While implements Instruccion{
 
@@ -30,6 +31,10 @@ export default class While implements Instruccion{
                 for(let ins of this.lista_instrucciones){
                     let res = ins.ejecutar(controlador,ts_local);
                      //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
+                     if(ins instanceof Detener || res instanceof Detener ){
+                         return res;
+                     }
+
                 }
             }
         }

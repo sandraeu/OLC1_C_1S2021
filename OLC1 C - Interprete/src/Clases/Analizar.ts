@@ -9,6 +9,19 @@ import { TablaSimbolos } from './TablaSimbolos/TablaSimbolos';
  */
 export class Analizador{
 
+    public recorrer(input){
+
+        try {
+            let ast = sintactico_interprete.parse(input);
+            let nodo_ast = ast.recorrer();
+
+            return nodo_ast;
+            
+        } catch (error) {
+            
+        }
+    }
+
     public ejecutar(input):any{
         console.log("vamos a analizar la entrada");
 

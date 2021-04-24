@@ -34,7 +34,7 @@ export default class Declaracion implements Instruccion{
             if(ts.existeEnActual(variable.identificador)){
                 let error = new Errores('Semantico', `La variable ${variable.identificador} ya existe en el entorno actual.`, this.linea, this.columna);
                 controlador.errores.push(error);
-                controlador.append(`** Error Semantico : La variable ${variable.identificador} ya existe en el entorno actual. En la linea ${this.linea} y columan ${this.columna}`);
+                controlador.append(`** Error Semantico : La variable ${variable.identificador} ya existe en el entorno actual. En la linea ${this.linea} y columna ${this.columna}`);
                 continue;
             }
 
